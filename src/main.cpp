@@ -73,17 +73,22 @@ int main()
         // 绘制物体
         colorShader.use();
         // 片段着色器所需的参数
-        colorShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
-        colorShader.setVec3("lightColor",  1.0f, 1.0f, 1.0f);
-        colorShader.setVec3("lightPos", glm::value_ptr(lightPos));
-        colorShader.setVec3("viewPos", glm::value_ptr(camera.Position));
+        colorShader.setVec3("viewPos", camera.Position);
+        colorShader.setVec3("material.ambient",  0.135f, 0.2225f, 0.1575f);
+        colorShader.setVec3("material.diffuse",  0.54f, 0.89f, 0.63f);
+        colorShader.setVec3("material.specular", 0.316228f, 0.316228f, 0.316228f);
+        colorShader.setFloat("material.shininess", 12.8f);
+        colorShader.setVec3("light.position", lightPos);
+        colorShader.setVec3("light.ambient",  1.0f, 1.0f, 1.0f);
+        colorShader.setVec3("light.diffuse",  1.0f, 1.0f, 1.0f); // 将光照调暗了一些以搭配场景
+        colorShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
         // 顶点着色器需要的参数
         glm::mat4 model = glm::mat4(1.0f);
         glm::mat4 normalMat = glm::transpose(glm::inverse(model)); // 法线矩阵
-        colorShader.setMat4("model", glm::value_ptr(model));
-        colorShader.setMat4("view", glm::value_ptr(view));
-        colorShader.setMat4("projection", glm::value_ptr(projection));
-        colorShader.setMat4("normalMat", glm::value_ptr(normalMat));
+        colorShader.setMat4("model", model);
+        colorShader.setMat4("view", view);
+        colorShader.setMat4("projection", projection);
+        colorShader.setMat4("normalMat", normalMat);
         glBindVertexArray(VAOCube);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
@@ -93,9 +98,9 @@ int main()
         model = glm::mat4(1.0f);
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.2f));
-        lampShader.setMat4("model", glm::value_ptr(model));
-        lampShader.setMat4("view", glm::value_ptr(view));
-        lampShader.setMat4("projection", glm::value_ptr(projection));
+        lampShader.setMat4("model", model);
+        lampShader.setMat4("view", view);
+        lampShader.setMat4("projection", projection);
         glBindVertexArray(VAOLight);
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
