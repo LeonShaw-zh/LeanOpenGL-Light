@@ -57,11 +57,14 @@ int main()
     unsigned int VAOLight;
     glGenVertexArrays(1, &VAOLight);
     makeLight(VAOLight);
-    unsigned int diffuseMap;
+    unsigned int diffuseMap, specularMap;
     glGenTextures(1, &diffuseMap);
+    glGenTextures(1, &specularMap);
     readTex(diffuseMap, "../src/tex/container2.png");
+    readTex(specularMap, "../src/tex/container2_specular.png");
     colorShader.use();
     colorShader.setInt("material.diffuse", 0);
+    colorShader.setInt("material.specular", 1);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -82,11 +85,12 @@ int main()
         colorShader.setVec3("viewPos", camera.Position);
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, diffuseMap);
-        colorShader.setVec3("material.specular", 0.316228f, 0.316228f, 0.316228f);
-        colorShader.setFloat("material.shininess", 12.8f);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, specularMap);
+        colorShader.setFloat("material.shininess", 64.0f);
         colorShader.setVec3("light.position", lightPos);
-        colorShader.setVec3("light.ambient",  1.0f, 1.0f, 1.0f);
-        colorShader.setVec3("light.diffuse",  1.0f, 1.0f, 1.0f); // 将光照调暗了一些以搭配场景
+        colorShader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
+        colorShader.setVec3("light.diffuse",  0.5f, 0.5f, 0.5f); // 将光照调暗了一些以搭配场景
         colorShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
         // 顶点着色器需要的参数
         glm::mat4 model = glm::mat4(1.0f);
