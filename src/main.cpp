@@ -100,8 +100,10 @@ int main()
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, specularMap);
         colorShader.setFloat("material.shininess", 64.0f);
-        // colorShader.setVec3("light.direction", -0.2f, -1.0f, -0.3f);
-        colorShader.setVec3("light.position", lightPos);
+        colorShader.setVec3("light.direction", camera.Front);
+        colorShader.setVec3("light.position", camera.Position);
+        colorShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+        colorShader.setFloat("light.outerCutOff", glm::cos(glm::radians(17.5f)));
         colorShader.setVec3("light.ambient",  0.2f, 0.2f, 0.2f);
         colorShader.setVec3("light.diffuse",  0.5f, 0.5f, 0.5f); // 将光照调暗了一些以搭配场景
         colorShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f); 
@@ -134,7 +136,7 @@ int main()
         lampShader.setMat4("view", view);
         lampShader.setMat4("projection", projection);
         glBindVertexArray(VAOLight);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        // glDrawArrays(GL_TRIANGLES, 0, 36);
 
         // 应用程序采用着双缓冲模式，一张在前面显示，一张在后面慢慢加载
         // Swap交换缓冲，完成立刻刷新
